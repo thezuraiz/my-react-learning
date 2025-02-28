@@ -1,4 +1,32 @@
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+
 const Login = () => {
+  const userSchema = z.object({
+    email: z.string().email(),
+    password: z.string().min(4).max(20),
+    // .regex(/[A-Z]/, {
+    //   message: "Password must contain at least one uppercase letter",
+    // })
+    // .regex(/[a-z]/, {
+    //   message: "Password must contain at least one lowercase letter",
+    // })
+    // .regex(/[0-9]/, { message: "Password must contain at least one number" })
+    // .regex(/[@$!%*?&]/, {
+    //   message:
+    //     "Password must contain at least one special character (@, $, !, %, *, ?, &)",
+    // }),
+  });
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(userSchema),
+  });
+
   return (
     <section className="h-screen bg-gray-100 flex justify-center items-center">
       <div className="border border-gray-200 rounded-2xl w-2/7 text-center bg-white p-8 mx-auto">
@@ -8,7 +36,10 @@ const Login = () => {
           className=" w-50 mx-auto my-2"
         />
 
-        <div className="text-start my-2">
+        <form
+          onSubmit={handleSubmit((d) => console.log(d))}
+          className="text-start my-2"
+        >
           <h3 className="text-2xl font-bold my-2">Log into your account</h3>
 
           <div className="my-5">
@@ -16,10 +47,17 @@ const Login = () => {
               Email
             </label>
             <input
+              {...register("email")}
               type="email"
               placeholder="email"
               className="rounded bg-gray-100 w-full p-3"
             />
+
+            {errors.email && (
+              <p className="text-red-500 text-sm mt-1">
+                {errors.email.message}
+              </p>
+            )}
           </div>
 
           <div className="my-5">
@@ -27,23 +65,32 @@ const Login = () => {
               Password
             </label>
             <input
+              {...register("password")}
               type="Password"
               placeholder="eg: PassLogin%7"
               className="rounded bg-gray-100 w-full p-3 focus:border-b-blue-200 focus:border-x transition-all ease-in-out duration-300"
             />
+            {errors.password && (
+              <p className="text-red-500 text-sm mt-1">
+                {errors.password.message}
+              </p>
+            )}
           </div>
 
           <a className="text-base font-medium text-blue-400" href="/forgot">
             Forgot Your Password?
           </a>
-          <button className="w-full bg-orange-500 p-3 text-white font-medium rounded-lg mt-4 hover:bg-orange-700 transition-all ease-in-out duration-300 cursor-pointer">
+          <button
+            type="submit"
+            className="w-full bg-orange-500 p-3 text-white font-medium rounded-lg mt-4 hover:bg-orange-700 transition-all ease-in-out duration-300 cursor-pointer"
+          >
             Login
           </button>
           <h5 className="text-base text-gray-600 mt-4">
             Dont have an account?
             <span className="font-medium text-blue-400">Sign up</span>
           </h5>
-        </div>
+        </form>
         <div className="relative flex py-3 items-center">
           <div className="flex-grow border-t border-gray-200"></div>
           <span className="flex-shrink mx-4 text-black">OR</span>
