@@ -6,18 +6,9 @@ const Login = () => {
   const userSchema = z.object({
     email: z.string().email(),
     password: z.string().min(4).max(20),
-    // .regex(/[A-Z]/, {
-    //   message: "Password must contain at least one uppercase letter",
-    // })
-    // .regex(/[a-z]/, {
-    //   message: "Password must contain at least one lowercase letter",
-    // })
-    // .regex(/[0-9]/, { message: "Password must contain at least one number" })
-    // .regex(/[@$!%*?&]/, {
-    //   message:
-    //     "Password must contain at least one special character (@, $, !, %, *, ?, &)",
-    // }),
   });
+
+  // window.localStorage.clear("isLogin");
 
   const {
     register,
@@ -26,6 +17,12 @@ const Login = () => {
   } = useForm({
     resolver: zodResolver(userSchema),
   });
+
+  var submitForm = (data) => {
+    window.localStorage.setItem("isLogin", true);
+    window.localStorage.setItem("email", data.email);
+    console.log("You are Loggined");
+  };
 
   return (
     <section className="h-screen bg-gray-100 flex justify-center items-center">
@@ -37,7 +34,7 @@ const Login = () => {
         />
 
         <form
-          onSubmit={handleSubmit((d) => console.log(d))}
+          onSubmit={handleSubmit((d) => submitForm(d))}
           className="text-start my-2"
         >
           <h3 className="text-2xl font-bold my-2">Log into your account</h3>
