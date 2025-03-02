@@ -26,7 +26,7 @@ const UseReducerHook = () => {
           className="px-4 py-2 rounded-xl bg-green-500 m-5"
           onClick={() => dispatch({ type: "Inc" })}
         >
-          Inncrement
+          Increment
         </button>
         <button
           className="px-4 py-2 rounded-xl bg-green-500 m-5"
