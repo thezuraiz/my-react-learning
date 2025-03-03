@@ -2,9 +2,10 @@ import { BrowserRouter } from "react-router-dom";
 import "./index.css";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
+import FormHandling from "./component/FormHandling";
+// import UseStateHook from "./hooks/useStateHook";
 // import UseLayoutEffect from "./hooks/useLayoutEffect";
 // import CustomHook from "./component/CustomHook";
-import UseStateHook from "./hooks/useStateHook";
 // import App from "./App.jsx";
 // import UseRefHook from "./hooks/useRefHook";
 // import UseImperativeHandleHook from "./hooks/useImperativeHandleHook";
@@ -17,7 +18,8 @@ import UseStateHook from "./hooks/useStateHook";
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <BrowserRouter>
-      <UseStateHook />
+      <FormHandling />
+      {/* <UseStateHook /> */}
       {/* <CustomHook /> */}
       {/* <UseLayoutEffect /> */}
       {/* <UseImperativeHandleHook /> */}
