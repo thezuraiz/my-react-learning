@@ -1,10 +1,11 @@
+import { BrowserRouter } from "react-router-dom";
+import "./index.css";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import "./index.css";
+import UseLayoutEffect from "./hooks/useLayoutEffect";
 // import App from "./App.jsx";
-import { BrowserRouter } from "react-router-dom";
 // import UseRefHook from "./hooks/useRefHook";
-import UseImperativeHandleHook from "./hooks/useImperativeHandleHook";
+// import UseImperativeHandleHook from "./hooks/useImperativeHandleHook";
 // import UseEffectComponent from "./props/useEffect";
 // import UseContextHook from "./hooks/useContext";
 // import UseReducerHook from "./hooks/useReducer";
@@ -14,7 +15,8 @@ import UseImperativeHandleHook from "./hooks/useImperativeHandleHook";
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <BrowserRouter>
-      <UseImperativeHandleHook />
+      <UseLayoutEffect />
+      {/* <UseImperativeHandleHook /> */}
       {/* <UseRefHook /> */}
       {/* <UseCallBackHook /> */}
       {/* <UseMemoHook /> */}
