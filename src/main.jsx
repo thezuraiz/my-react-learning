@@ -2,11 +2,13 @@ import { BrowserRouter } from "react-router-dom";
 import "./index.css";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import FormHandling from "./component/FormHandling";
+// import UseFetchHook from "./hooks/customHooks/UseFetchHook";
+// import UseParamHook from "./hooks/customHooks/useParamHook";
+// import FormHandling from "./component/FormHandling";
 // import UseStateHook from "./hooks/useStateHook";
 // import UseLayoutEffect from "./hooks/useLayoutEffect";
 // import CustomHook from "./component/CustomHook";
-// import App from "./App.jsx";
+import App from "./App.jsx";
 // import UseRefHook from "./hooks/useRefHook";
 // import UseImperativeHandleHook from "./hooks/useImperativeHandleHook";
 // import UseEffectComponent from "./props/useEffect";
@@ -18,7 +20,8 @@ import FormHandling from "./component/FormHandling";
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <BrowserRouter>
-      <FormHandling />
+      {/* <UseFetchHook /> */}
+      {/* <FormHandling /> */}
       {/* <UseStateHook /> */}
       {/* <CustomHook /> */}
       {/* <UseLayoutEffect /> */}
@@ -29,7 +32,7 @@ createRoot(document.getElementById("root")).render(
       {/* <UseReducerHook /> */}
       {/* <UseContextHook /> */}
       {/* <UseEffectComponent /> */}
-      {/* <App />useEffectComponent*/}
+      <App />
     </BrowserRouter>
   </StrictMode>
 );

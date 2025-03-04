@@ -5,6 +5,7 @@ import Blogs from "./pages/Blogs";
 import ProductPage from "./pages/products";
 import { Routes, Route, useLocation, Navigate } from "react-router-dom";
 import Login from "./pages/authentication/login";
+import UseParamHook from "./hooks/customHooks/useParamHook";
 
 const App = () => {
   const location = useLocation();
@@ -18,6 +19,8 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="blogs" element={<Blogs />} />
+        <Route path="/users/:id" element={<UseParamHook />} />
+
         <Route
           path="products"
           element={
