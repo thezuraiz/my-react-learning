@@ -1,32 +1,76 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useContext } from "react";
+
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { UserContext } from "../../App";
+import { useUser } from "../../context/UserContext";
 import { Link } from "react-router-dom";
+import { useEffect } from "react";
 
 const LoginUsinAuthentication = () => {
   console.log("Login form by UseContext");
-  const { user, setUser } = useContext(UserContext);
+
   const userSchema = z.object({
     email: z.string().email(),
     password: z.string().min(4).max(20),
+  });
+
+  const { user, setUser } = useUser();
+  console.log("User: ", user);
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      const user = JSON.parse(storedUser);
+      setValue("password", user.password);
+      setValue("email", user.email);
+    }
   });
 
   const {
     register,
     handleSubmit,
     formState: { errors },
+
+    setValue,
   } = useForm({
     resolver: zodResolver(userSchema),
   });
 
-  var submitForm = (data) => {
-    console.log("setUser", setUser);
-    // setUser(() => ({ username: data.username, isAuthenticated: true }));
-    setUser({ username: data.email, isAuthenticated: true });
-    console.log("user", user);
-    console.log("You are Loggined");
+  var submitForm = async (data) => {
+    try {
+      await fetch("https://apiadsells.nms-mdm.com/api/token/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: data.email,
+          password: data.password,
+        }),
+      })
+        .then((response) => response.json())
+        .then((apiData) => {
+          console.log("Api Data: ", data);
+          setUser((prev) => ({
+            ...prev,
+            isAuthenticated: true,
+            accessToken: apiData.access,
+          }));
+          localStorage.setItem(
+            "user",
+            JSON.stringify({
+              email: data.email,
+              password: data.password,
+              accessToken: apiData.access,
+            })
+          );
+          alert("You are Loggined");
+          console.log("You are Loggined");
+        });
+    } catch (error) {
+      alert("Loggined Failed: ", error);
+      console.error("Error:", error);
+    }
   };
 
   return (

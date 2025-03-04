@@ -21,6 +21,7 @@ const Login = () => {
   var submitForm = (data) => {
     window.localStorage.setItem("isLogin", true);
     window.localStorage.setItem("email", data.email);
+
     console.log("You are Loggined");
   };
 

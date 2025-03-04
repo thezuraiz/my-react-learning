@@ -4,28 +4,23 @@ import Footer from "./sections/footer";
 import Blogs from "./pages/Blogs";
 import ProductPage from "./pages/products";
 import { Routes, Route, useLocation, Navigate } from "react-router-dom";
-import Login from "./pages/authentication/login";
+
 import UseParamHook from "./hooks/customHooks/useParamHook";
 import Home from "./pages/Home";
-import { createContext, useState } from "react";
-import LoginUsinAuthentication from "./pages/authentication/LoginUsinAuthentication";
 
-const UserContext = createContext();
+import LoginUsinAuthentication from "./pages/authentication/LoginUsinAuthentication";
+import UserProvider from "./context/UserContext";
+
 const App = () => {
   const location = useLocation();
   const hideHeaderFooter = location.pathname === "/login";
   const isLogin = window.localStorage.getItem("isLogin");
   console.log("---->", isLogin);
 
-  const [user, setUser] = useState({
-    username: "",
-    isAuthenticated: false,
-  });
-
   return (
     <>
       {!hideHeaderFooter && <Header />}
-      <UserContext.Provider value={{ user, setUser }}>
+      <UserProvider>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="blogs" element={<Blogs />} />
@@ -52,12 +47,10 @@ const App = () => {
             }
           />
         </Routes>
-      </UserContext.Provider>
-
+      </UserProvider>
       {!hideHeaderFooter && <Footer />}
     </>
   );
 };
 
 export default App;
-export { UserContext };
