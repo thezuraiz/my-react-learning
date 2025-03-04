@@ -20,6 +20,9 @@ const UseEffectComponent = () => {
       setContent("Reset");
     };
   }, [count]);
+  // dependecy aray empty []
+  // dependency array have value [x]
+  // no depenswncy array
 
   return (
     <>

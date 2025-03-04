@@ -1,6 +1,6 @@
 import { BrowserRouter } from "react-router-dom";
 import "./index.css";
-import { StrictMode } from "react";
+
 import { createRoot } from "react-dom/client";
 // import UseFetchHook from "./hooks/customHooks/UseFetchHook";
 // import UseParamHook from "./hooks/customHooks/useParamHook";
@@ -8,8 +8,8 @@ import { createRoot } from "react-dom/client";
 // import UseStateHook from "./hooks/useStateHook";
 // import UseLayoutEffect from "./hooks/useLayoutEffect";
 // import CustomHook from "./component/CustomHook";
-// import App from "./App.jsx";
-import UseCounterComponent from "./component/UseCounterComponent.jsx";
+import App from "./App.jsx";
+// import UseCounterComponent from "./component/UseCounterComponent.jsx";
 // import UseRefHook from "./hooks/useRefHook";
 // import UseImperativeHandleHook from "./hooks/useImperativeHandleHook";
 // import UseEffectComponent from "./props/useEffect";
@@ -19,22 +19,21 @@ import UseCounterComponent from "./component/UseCounterComponent.jsx";
 // import UseCallBackHook from "./hooks/useCallBackHook";
 
 createRoot(document.getElementById("root")).render(
-  <StrictMode>
-    <BrowserRouter>
-      <UseCounterComponent />
-      {/* <UseFetchHook /> */}
-      {/* <FormHandling /> */}
-      {/* <UseStateHook /> */}
-      {/* <CustomHook /> */}
-      {/* <UseLayoutEffect /> */}
-      {/* <UseImperativeHandleHook /> */}
-      {/* <UseRefHook /> */}
-      {/* <UseCallBackHook /> */}
-      {/* <UseMemoHook /> */}
-      {/* <UseReducerHook /> */}
-      {/* <UseContextHook /> */}
-      {/* <UseEffectComponent /> */}
-      {/* <App /> */}
-    </BrowserRouter>
-  </StrictMode>
+  <BrowserRouter>
+    {/* <UseCounterComponent /> */}
+    {/* <UseFetchHook /> */}
+    {/* <FormHandling /> */}
+    {/* <UseStateHook /> */}
+    {/* <CustomHook /> */}
+    {/* <UseLayoutEffect /> */}
+    {/* <UseImperativeHandleHook /> */}
+    {/* <UseRefHook /> */}
+    {/* <UseCallBackHook /> */}
+    {/* <UseMemoHook /> */}
+    {/* <UseReducerHook /> */}
+    {/* <UseContextHook /> */}
+    {/* <UseEffectComponent /> */}
+
+    <App />
+  </BrowserRouter>
 );
