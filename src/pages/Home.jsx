@@ -2,32 +2,28 @@ import { useContext, useEffect } from "react";
 import HeroGift from "../sections/HeroGift";
 import TopProducts from "../sections/TopProducts";
 import { UserContext } from "../context/UserContext";
+import useFetchApi from "../helper_function/api_handler";
 
 const Home = () => {
   const { user, setUser } = useContext(UserContext);
+  const { fetch_Api } = useFetchApi();
   console.log(user);
   const fetchProfile = async () => {
     try {
-      console.log("Fetching Profile");
-      console.log("user.access: ", user.access);
-
-      const response = await fetch(
+      const response = await fetch_Api(
         "https://apiadsells.nms-mdm.com/api/profile/",
+        "GET",
         {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${user.access}`,
-          },
+          "Content-Type": "application/json",
         }
       );
-
-      const apiData = await response.json();
-      console.log("Success:", apiData.type);
-      if (apiData.type == "client_error") {
+      console.log("Fetching Profile");
+      console.log("Success:", response);
+      if (response.type == "client_error") {
         throw new Error("Un Authenticated");
       }
-      localStorage.setItem("userProfile", JSON.stringify(apiData));
-      setUser((prev) => ({ ...prev, ...apiData }));
+      console.log("Profile: ", response);
+      setUser({ ...response });
     } catch (e) {
       alert("Error: " + e.message);
     }

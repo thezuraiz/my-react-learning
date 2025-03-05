@@ -10,12 +10,18 @@ import Home from "./pages/Home";
 
 import LoginUsinAuthentication from "./pages/authentication/LoginUsinAuthentication";
 import UserProvider from "./context/UserContext";
+import { useEffect } from "react";
 
 const App = () => {
   const location = useLocation();
   const hideHeaderFooter = location.pathname === "/login";
-  const isLogin = window.localStorage.getItem("isLogin");
-  console.log("---->", isLogin);
+  let isLogin = false;
+  useEffect(() => {
+    const user = localStorage.getItem("userProfile");
+    const accessToken = user ? JSON.parse(user).accessToken : null;
+    isLogin = !!accessToken;
+    console.log("---->", isLogin);
+  }, []);
 
   return (
     <>
@@ -39,11 +45,7 @@ const App = () => {
           <Route
             path="login"
             element={
-              isLogin === true ? (
-                <Navigate to="/" />
-              ) : (
-                <LoginUsinAuthentication />
-              )
+              isLogin ? <LoginUsinAuthentication /> : <Navigate to="/" />
             }
           />
         </Routes>

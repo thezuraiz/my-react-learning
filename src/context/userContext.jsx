@@ -1,27 +1,25 @@
 /* eslint-disable react/prop-types */
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useState } from "react";
 
 export const UserContext = createContext();
 const UserProvider = ({ children }) => {
-  const [user, setUser] = useState({
-    username: "",
-    isAuthenticated: false,
-    accessToken: "",
-    id: null,
-    email: "",
-    role: "",
-    phone_number: "",
+  const [user, _setUser] = useState(() => {
+    const savedUser = localStorage.getItem("userProfile");
+    return savedUser ? JSON.parse(savedUser) : {};
   });
 
-  useEffect(() => {
-    let profile = localStorage.getItem("userProfile");
-    console.log("Profilie", profile);
-    if (profile != null) {
-      let data = JSON.parse(profile);
-      setUser(data);
-    }
-    console.log("User Profile: ", profile);
-  }, []);
+  let setUser = (data) => {
+    _setUser((prev) => {
+      // console.log("data: ", data);
+      let newData = typeof data === "string" ? JSON.parse(data) : data;
+      console.log("New Data: ", newData);
+      console.log("Prev: ", prev);
+      let newUser = { ...prev, ...newData };
+      console.log("New User: ", newUser);
+      localStorage.setItem("userProfile", JSON.stringify(newUser));
+      return newUser;
+    });
+  };
 
   return (
     <UserContext.Provider value={{ user, setUser }}>

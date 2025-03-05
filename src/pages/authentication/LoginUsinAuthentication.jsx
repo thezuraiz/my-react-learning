@@ -4,7 +4,8 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useUser } from "../../context/UserContext";
 import { Link } from "react-router-dom";
-import { useEffect } from "react";
+import useFetchApi from "../../helper_function/api_handler";
+import { useNavigate } from "react-router-dom";
 
 const LoginUsinAuthentication = () => {
   console.log("Login form by UseContext");
@@ -14,59 +15,44 @@ const LoginUsinAuthentication = () => {
     password: z.string().min(4).max(20),
   });
 
+  const { fetch_Api } = useFetchApi();
+  const navigate = useNavigate();
   const { user, setUser } = useUser();
   console.log("User: ", user);
-
-  useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      const user = JSON.parse(storedUser);
-      setValue("password", user.password);
-      setValue("email", user.email);
-    }
-  });
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-
     setValue,
   } = useForm({
     resolver: zodResolver(userSchema),
   });
 
+  setValue("email", "ghouri.dev@gmail.com");
+  setValue("password", "12345678Ab!");
   var submitForm = async (data) => {
     try {
-      await fetch("https://apiadsells.nms-mdm.com/api/token/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
+      let response = await fetch_Api(
+        "https://apiadsells.nms-mdm.com/api/token/",
+        "POST",
+        { "Content-Type": "application/json" },
+        JSON.stringify({
           email: data.email,
           password: data.password,
-        }),
-      })
-        .then((response) => response.json())
-        .then((apiData) => {
-          console.log("Api Data: ", apiData);
-          setUser((prev) => ({
-            ...prev,
-            isAuthenticated: true,
-            accessToken: apiData.access,
-          }));
-          localStorage.setItem(
-            "user",
-            JSON.stringify({
-              email: data.email,
-              password: data.password,
-              accessToken: apiData.access,
-            })
-          );
-          alert("You are Loggined");
-          console.log("You are Loggined");
-        });
+          // email: "ghouri.dev@gmail.com",
+          // password: "12345678Ab!",
+        })
+      );
+      if (response.type == "client_error") {
+        throw new Error("Un Authenticated");
+      } else {
+        console.log("response: ", response);
+        setUser({ accessToken: response.access });
+        alert("You are Loggined");
+        console.log("You are Loggined");
+        navigate("/");
+      }
     } catch (error) {
       alert("Loggined Failed: ", error);
       console.error("Error:", error);
