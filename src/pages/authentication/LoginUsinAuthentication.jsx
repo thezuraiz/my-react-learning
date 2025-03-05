@@ -50,7 +50,7 @@ const LoginUsinAuthentication = () => {
       })
         .then((response) => response.json())
         .then((apiData) => {
-          console.log("Api Data: ", data);
+          console.log("Api Data: ", apiData);
           setUser((prev) => ({
             ...prev,
             isAuthenticated: true,

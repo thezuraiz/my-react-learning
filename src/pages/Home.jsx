@@ -9,14 +9,14 @@ const Home = () => {
   const fetchProfile = async () => {
     try {
       console.log("Fetching Profile");
-      console.log("user.accessToken: ", user.accessToken);
+      console.log("user.access: ", user.access);
 
       const response = await fetch(
         "https://apiadsells.nms-mdm.com/api/profile/",
         {
           method: "GET",
           headers: {
-            Authorization: `Bearer ${user.accessToken}`, // Use Bearer token format
+            Authorization: `Bearer ${user.access}`,
           },
         }
       );
@@ -29,7 +29,7 @@ const Home = () => {
       localStorage.setItem("userProfile", JSON.stringify(apiData));
       setUser((prev) => ({ ...prev, ...apiData }));
     } catch (e) {
-      alert("Error: " + e.message); // Fix alert syntax
+      alert("Error: " + e.message);
     }
   };
   useEffect(() => {
@@ -41,9 +41,11 @@ const Home = () => {
   }, []);
   return (
     <>
-      <h3>User: {user.first_name}</h3>
-      <h3>Is Authenticated: {user.isAuthenticated ? "true" : "false"}</h3>
+      <h3>User: {user.first_name + " " + user.last_name}</h3>
       <h3>Email: {user.email}</h3>
+      <h3>Role: {user.role}</h3>
+      <h3>Phone No: {user.phone_number}</h3>
+      <h3>Is Authenticated: {user.isAuthenticated ? "true" : "false"}</h3>
       <HeroGift />
       <TopProducts heading="Top Products" />
       <TopProducts heading="Most Popular" />
