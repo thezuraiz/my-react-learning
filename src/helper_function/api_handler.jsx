@@ -1,7 +1,9 @@
-import { useUser } from "../context/UserContext";
+// import { useUser } from "../context/UserContext";
+import { useSelector } from "react-redux";
 
 let useFetchApi = () => {
-  const { user } = useUser();
+  // const { user } = useUser();
+  const user = useSelector((state) => state);
   const fetch_Api = async (
     url = null,
     method = "POST",

@@ -2,11 +2,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { useUser } from "../../context/UserContext";
+// import { useUser } from "../../context/UserContext";
 import { Link } from "react-router-dom";
 import useFetchApi from "../../helper_function/api_handler";
 import { useNavigate } from "react-router-dom";
 import InputField from "../../helper_function/InputField";
+import { useDispatch } from "react-redux";
 
 const LoginUsinAuthentication = () => {
   console.log("Login form by UseContext");
@@ -18,8 +19,11 @@ const LoginUsinAuthentication = () => {
 
   const { fetch_Api } = useFetchApi();
   const navigate = useNavigate();
-  const { user, setUser } = useUser();
-  console.log("User: ", user);
+  // const { user, setUser } = useUser();
+  // console.log("User: ", user);
+
+  const dispatch = useDispatch();
+  // const user = useSelector((state) => state);
 
   const {
     register,
@@ -49,7 +53,10 @@ const LoginUsinAuthentication = () => {
         throw new Error("Un Authenticated");
       } else {
         console.log("response: ", response);
-        setUser({ accessToken: response.access });
+        dispatch({
+          type: "LOGIN",
+          payload: { accessToken: response.access },
+        });
         alert("You are Loggined");
         console.log("You are Loggined");
         navigate("/");
@@ -84,22 +91,14 @@ const LoginUsinAuthentication = () => {
             name="email"
             error={errors.email}
           />
-          <div className="my-5">
-            <label htmlFor="Password" className="block font-medium my-1">
-              Password
-            </label>
-            <input
-              {...register("password")}
-              type="Password"
-              placeholder="eg: PassLogin%7"
-              className="rounded bg-gray-100 w-full p-3 focus:border-b-blue-200 focus:border-x transition-all ease-in-out duration-300"
-            />
-            {errors.password && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors.password.message}
-              </p>
-            )}
-          </div>
+          <InputField
+            label="Password"
+            placeholde="eg: PassLogin%7"
+            type="password"
+            register={register}
+            name="password"
+            error={errors.password}
+          />
 
           <a className="text-base font-medium text-blue-400" href="/forgot">
             Forgot Your Password?

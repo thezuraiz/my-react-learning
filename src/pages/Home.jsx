@@ -1,13 +1,17 @@
-import { useContext, useEffect } from "react";
+import { useEffect } from "react";
 import HeroGift from "../sections/HeroGift";
 import TopProducts from "../sections/TopProducts";
-import { UserContext } from "../context/UserContext";
+// import { UserContext } from "../context/UserContext";
 import useFetchApi from "../helper_function/api_handler";
+import { useDispatch, useSelector } from "react-redux";
 
 const Home = () => {
-  const { user, setUser } = useContext(UserContext);
+  // const { user, setUser } = useContext(UserContext);
+  /// Now using Redux
+  const user = useSelector((state) => state);
+  const dispatch = useDispatch();
   const { fetch_Api } = useFetchApi();
-  console.log(user);
+  console.log("user==>", user);
   const fetchProfile = async () => {
     try {
       const response = await fetch_Api(
@@ -23,7 +27,11 @@ const Home = () => {
         throw new Error("Un Authenticated");
       }
       console.log("Profile: ", response);
-      setUser({ ...response });
+      // setUser({ ...response });
+      dispatch({
+        type: "LOGIN",
+        payload: { ...response },
+      });
     } catch (e) {
       alert("Error: " + e.message);
     }
