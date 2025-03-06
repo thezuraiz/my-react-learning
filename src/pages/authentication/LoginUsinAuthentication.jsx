@@ -6,6 +6,7 @@ import { useUser } from "../../context/UserContext";
 import { Link } from "react-router-dom";
 import useFetchApi from "../../helper_function/api_handler";
 import { useNavigate } from "react-router-dom";
+import InputField from "../../helper_function/InputField";
 
 const LoginUsinAuthentication = () => {
   console.log("Login form by UseContext");
@@ -75,25 +76,14 @@ const LoginUsinAuthentication = () => {
           className="text-start my-2"
         >
           <h3 className="text-2xl font-bold my-2">Log into your account</h3>
-
-          <div className="my-5">
-            <label htmlFor="Email" className="block font-medium my-1">
-              Email
-            </label>
-            <input
-              {...register("email")}
-              type="email"
-              placeholder="email"
-              className="rounded bg-gray-100 w-full p-3"
-            />
-
-            {errors.email && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors.email.message}
-              </p>
-            )}
-          </div>
-
+          <InputField
+            label="Email"
+            placeholde="Enter Email"
+            type="email"
+            register={register}
+            name="email"
+            error={errors.email}
+          />
           <div className="my-5">
             <label htmlFor="Password" className="block font-medium my-1">
               Password

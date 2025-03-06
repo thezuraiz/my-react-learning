@@ -45,7 +45,7 @@ const App = () => {
           <Route
             path="login"
             element={
-              isLogin ? <LoginUsinAuthentication /> : <Navigate to="/" />
+              !isLogin ? <LoginUsinAuthentication /> : <Navigate to="/" />
             }
           />
         </Routes>
