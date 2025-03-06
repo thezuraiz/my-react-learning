@@ -19,6 +19,7 @@ const App = () => {
   useEffect(() => {
     const user = localStorage.getItem("userProfile");
     const accessToken = user ? JSON.parse(user).accessToken : null;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     isLogin = !!accessToken;
     console.log("---->", isLogin);
   }, []);
