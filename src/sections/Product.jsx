@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import ApiLoader from "../component/Loader";
 import Breadcrumb from "../component/BreadCrumb";
@@ -9,6 +9,7 @@ import { FaRegStar } from "react-icons/fa";
 
 const Product = () => {
   const params = useParams();
+  let queryClient = useQueryClient();
 
   const id = params.id;
   let fetchProducts = async () => {
@@ -21,20 +22,37 @@ const Product = () => {
     queryFn: fetchProducts,
     staleTime: Infinity,
   });
-  let products = async (newProduct) => {
-    await axios.put(`https://dummyjson.com/products/${id}`, newProduct);
-    return products.data;
+  let updateProduct = async (newProduct) => {
+    console.log("newProduct: ", newProduct);
+    let response = await axios.put(
+      `https://dummyjson.com/products/${id}`,
+      newProduct
+    );
+    console.log("response: ", response);
+    return response.data;
   };
   let mutation = useMutation({
-    mutationFn: products,
+    mutationFn: updateProduct,
     onMutate: async (newProduct) => {
-      console.log("onMutate", newProduct);
+      await queryClient.cancelQueries(["products", id]);
 
-      // let products = await axios.put(
-      //   `https://dummyjson.com/products/${id}`,
-      //   newProduct
-      // );
-      return newProduct;
+      const previousTodos = queryClient.getQueryData(["products", id]);
+
+      /// To Update previous product data
+      queryClient.setQueryData(["products", id], (old) => {
+        if (!old) return newProduct;
+        return { ...old, ...newProduct };
+      });
+      queryClient.setQueryData("products", (old) => {
+        console.log("old: ", old);
+        return {
+          ...old,
+          products: old.products.map((product) =>
+            product.id == id ? { ...product, ...newProduct } : product
+          ),
+        };
+      });
+      return { previousTodos };
     },
   });
 
@@ -134,17 +152,9 @@ const Product = () => {
                 className="rounded-lg text-white px-8 font-medium py-2 bg-amber-500 cursor-pointer "
                 onClick={() => {
                   let body = {
-                    title: "",
-                    description: "",
-                    price: 0,
-                    stock: 0,
-                    rating: 0,
-                    discountPercentage: 0,
-                    category: "",
-                    tags: [],
-                    brand: "",
-                    sku: "",
-                    thumbnail: "",
+                    title: "Iphone 12 ULTRA Pro Max",
+                    description: "Lolx Ultra Pro Max",
+                    price: 1200,
                   };
                   mutation.mutate(body);
                 }}

@@ -18,7 +18,7 @@ const ProductPage = () => {
   };
 
   const { isLoading, error, data } = useQuery({
-    queryKey: ["products"],
+    queryKey: "products",
     queryFn: fetchProducts,
     staleTime: Infinity,
   });
