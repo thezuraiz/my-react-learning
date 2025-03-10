@@ -27,14 +27,14 @@ const Header = () => {
             <IoClose className="text-base" />
             Close
           </button>
-          <a href="#">
+          <Link to={"/"}>
             <img
               className="relative"
               src="https://dealaday-images.eu-central-1.linodeobjects.com/5309fd5b3d244d1bf1dfe116e5c49063/test1679300288.svg"
               alt=""
               height={210}
             />
-          </a>
+          </Link>
         </div>
 
         <ul className="text-lg text-gray-600 font-light border-b border-gray-200 py-7">
@@ -78,14 +78,14 @@ const Header = () => {
 
       <header className="bg-[#101828]">
         <div className=" max-w-md sm:max-w-lg md:max-w-2xl lg:max-w-3xl xl:max-w-6xl 2xl:max-w-8xl mx-auto text-white flex justify-between items-center lg:pt-5 px-3 py-3">
-          <a href="#">
+          <Link to="/">
             <img
               className="relative"
               src="https://dealaday-images.eu-central-1.linodeobjects.com/5309fd5b3d244d1bf1dfe116e5c49063/test1679300288.svg"
               alt=""
               height={210}
             />
-          </a>
+          </Link>
           <ul className="justify-between items-center hidden lg:flex">
             <li>
               <Link to="/" className="px-5 font-medium hover:text-blue-500">

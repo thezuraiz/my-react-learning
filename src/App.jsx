@@ -11,6 +11,7 @@ import Home from "./pages/Home";
 import LoginUsinAuthentication from "./pages/authentication/LoginUsinAuthentication";
 import UserProvider from "./context/UserContext";
 import { useEffect } from "react";
+import Product from "./sections/Product";
 
 const App = () => {
   const location = useLocation();
@@ -22,7 +23,7 @@ const App = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     isLogin = !!accessToken;
     console.log("---->", isLogin);
-  }, []);
+  });
 
   return (
     <>
@@ -31,22 +32,14 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="blogs" element={<Blogs />} />
+          <Route path="/products/:id" element={<Product />} />
           <Route path="/users/:id" element={<UseParamHook />} />
 
-          <Route
-            path="products"
-            element={
-              isLogin === true ? (
-                <ProductPage />
-              ) : (
-                <Navigate to="/login" replace={false} />
-              )
-            }
-          />
+          <Route path="products" element={<ProductPage />} />
           <Route
             path="login"
             element={
-              !isLogin ? <LoginUsinAuthentication /> : <Navigate to="/" />
+              !isLogin ? <Navigate to="/" /> : <LoginUsinAuthentication />
             }
           />
         </Routes>

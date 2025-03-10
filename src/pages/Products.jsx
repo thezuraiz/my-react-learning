@@ -1,15 +1,37 @@
 import { useState } from "react";
 import { IoClose } from "react-icons/io5";
 import { CiFilter } from "react-icons/ci";
-import { products } from "../constant";
+import ApiLoader from "../component/Loader";
+
+import axios from "axios";
 import Card from "../component/card";
+import { useQuery } from "@tanstack/react-query";
 const ProductPage = () => {
   const [filterOpen, setFilterOpen] = useState(false);
+  const [filter, setFilter] = useState("Default");
+
+  let fetchProducts = async () => {
+    let products = await axios.get(
+      "https://dummyjson.com/products/search?q=phone"
+    );
+    return products.data;
+  };
+
+  const { isLoading, error, data } = useQuery({
+    queryKey: ["products"],
+    queryFn: fetchProducts,
+    staleTime: Infinity,
+  });
 
   const toggleFiltersBar = () => {
     console.log("Clicked " + filterOpen);
     setFilterOpen(!filterOpen);
   };
+
+  if (error) {
+    return <h1>Error: {error.message}</h1>;
+  }
+
   return (
     <>
       <nav
@@ -106,7 +128,7 @@ const ProductPage = () => {
           </li>
         </ul>
       </nav>
-      <main className="mx-auto max-w-xs sm:max-w-lg md:max-w-2xl lg:max-w-3xl xl:max-w-6xl 2xl:max-w-8xl my-8 transition-all duration-300 ease-in-out">
+      <main className="mx-auto max-w-xs sm:max-w-lg md:max-w-2xl lg:max-w-3xl xl:max-w-6xl 2xl:max-w-8xl my-8 transition-all duration-300 ease-in-out !scroll-smooth">
         <div className="flex flex-col items-start sm:flex-row gap-2 justify-between sm:items-center mb-5">
           <h1 className="text-3xl font-bold">All Products</h1>
           <div className="flex gap-5">
@@ -120,11 +142,14 @@ const ProductPage = () => {
               </h5>
             </div>
             <div className="border border-gray-200 rounded-lg px-3 lg:px-2 py-2 lg:py-1">
-              <select name="cars" id="cars">
-                <option value="volvo">Default</option>
-                <option value="saab">Recently Added</option>
-                <option value="mercedes">Price: Low to High</option>
-                <option value="audi">Price: High to Low</option>
+              <select
+                name="cars"
+                id="cars"
+                onChange={(e) => setFilter(e.target.value)}
+              >
+                <option value="Default">Default</option>
+                <option value="high-to-low">Price: High to Low</option>
+                <option value="low-to-high">Price: Low to High</option>
               </select>
             </div>
           </div>
@@ -294,10 +319,19 @@ const ProductPage = () => {
             <h4 className="font-semibold my-4">Price Range</h4>
             <input type="range" className="w-full" />
           </div>
-          <div className="col-span-3 border-gray-400 rounded-lg grid grid-cols-1 sm:grid-cols-3 gap-5">
-            {products.map((e) => (
-              <Card key={e.name} {...e} />
-            ))}
+          <div className="col-span-3 border-gray-400 rounded-lg grid grid-cols-1 sm:grid-cols-3 gap-5 transition-all duration-500 ease-in-out">
+            {isLoading ? (
+              <ApiLoader />
+            ) : (
+              data?.products
+                .slice()
+                .sort((a, b) => {
+                  if (filter === "low-to-high") return a.price - b.price;
+                  if (filter === "high-to-low") return b.price - a.price;
+                  return 0;
+                })
+                .map((e) => <Card key={e.title} {...e} />)
+            )}
           </div>
         </section>
       </main>
