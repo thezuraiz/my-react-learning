@@ -43,7 +43,7 @@ const Product = () => {
         if (!old) return newProduct;
         return { ...old, ...newProduct };
       });
-      queryClient.setQueryData("products", (old) => {
+      queryClient.setQueryData(["products"], (old) => {
         console.log("old: ", old);
         return {
           ...old,
@@ -78,7 +78,7 @@ const Product = () => {
   return (
     <>
       <Breadcrumb />
-      <div className="max-w-md sm:max-w-lg md:max-w-2xl lg:max-w-3xl xl:max-w-6xl 2xl:max-w-8xl mx-auto py-10">
+      <div className="max-w-md sm:max-w-lg md:max-w-2xl lg:max-w-3xl xl:max-w-6xl 2xl:max-w-8xl mx-auto py-10 px-4">
         <h3 className="text-4xl">{data.title}</h3>
         <ul className="flex my-4 gap-3 text-sm">
           <li>
@@ -91,7 +91,7 @@ const Product = () => {
         </ul>
 
         <div className="flex justify-between p-3 gap-3 items-stretch flex-col sm:flex-row">
-          <div className="border border-gray-200 rounded-xl w-full">
+          <div className="border border-gray-200 rounded-xl w-full overflow-hidden">
             <img
               src={data.thumbnail}
               alt=""

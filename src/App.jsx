@@ -36,12 +36,7 @@ const App = () => {
           <Route path="/users/:id" element={<UseParamHook />} />
 
           <Route path="products" element={<ProductPage />} />
-          <Route
-            path="login"
-            element={
-              !isLogin ? <Navigate to="/" /> : <LoginUsinAuthentication />
-            }
-          />
+          <Route path="login" element={<LoginUsinAuthentication />} />
         </Routes>
       </UserProvider>
       {!hideHeaderFooter && <Footer />}
