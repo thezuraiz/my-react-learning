@@ -2,26 +2,44 @@ import { useState } from "react";
 import { IoClose } from "react-icons/io5";
 import { CiFilter } from "react-icons/ci";
 import ApiLoader from "../component/Loader";
-
+import { PiGreaterThanBold, PiLessThan } from "react-icons/pi";
 import axios from "axios";
 import Card from "../component/card";
-import { useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
+import { useSearchParams } from "react-router-dom";
 const ProductPage = () => {
   const [filterOpen, setFilterOpen] = useState(false);
   const [filter, setFilter] = useState("Default");
 
+  const [searchParams, setSearchParams] = useSearchParams({
+    limit: 9,
+    skip: 0,
+  });
+
+  const limit = parseInt(searchParams.get("limit") || 9);
+  const skip = parseInt(searchParams.get("skip") || 0);
+
+  // console.log("limit", limit);
+  // console.log("skip", skip);
+
   let fetchProducts = async () => {
     let products = await axios.get(
-      "https://dummyjson.com/products/search?q=phone"
+      `https://dummyjson.com/products?limit=${limit}&skip=${skip}`
     );
     return products.data;
   };
 
   const { isLoading, error, data } = useQuery({
-    queryKey: ["products"],
+    queryKey: ["products", limit, skip],
     queryFn: fetchProducts,
     staleTime: Infinity,
+    // Prevents UI jumps by keeping previous data while fetching new data
+    placeholderData: keepPreviousData,
   });
+
+  let setParams = (prev) => {
+    setSearchParams({ skip: skip + prev, limit });
+  };
 
   const toggleFiltersBar = () => {
     console.log("Clicked " + filterOpen);
@@ -145,7 +163,10 @@ const ProductPage = () => {
               <select
                 name="cars"
                 id="cars"
-                onChange={(e) => setFilter(e.target.value)}
+                onChange={(e) => {
+                  setSearchParams({ skip: 0, limit });
+                  setFilter(e.target.value);
+                }}
               >
                 <option value="Default">Default</option>
                 <option value="high-to-low">Price: High to Low</option>
@@ -319,20 +340,40 @@ const ProductPage = () => {
             <h4 className="font-semibold my-4">Price Range</h4>
             <input type="range" className="w-full" />
           </div>
-          <div className="col-span-3 border-gray-400 rounded-lg grid grid-cols-1 sm:grid-cols-3 gap-5 transition-all duration-500 ease-in-out">
-            {isLoading ? (
-              <ApiLoader />
-            ) : (
-              data?.products
-                .slice()
-                .sort((a, b) => {
-                  if (filter === "low-to-high") return a.price - b.price;
-                  if (filter === "high-to-low") return b.price - a.price;
-                  return 0;
-                })
-                .map((e) => <Card key={e.title} {...e} />)
-            )}
-          </div>
+          {isLoading ? (
+            <ApiLoader />
+          ) : (
+            <div className="col-span-3 border-gray-400 rounded-lg grid grid-cols-1 sm:grid-cols-3 gap-5 transition-all duration-500 ease-in-out">
+              <div className="col-span-3 border-gray-400 rounded-lg grid grid-cols-1 sm:grid-cols-3 gap-5 transition-all duration-500 ease-in-out">
+                {data?.products
+                  .slice()
+                  .sort((a, b) => {
+                    if (filter === "low-to-high") return a.price - b.price;
+                    if (filter === "high-to-low") return b.price - a.price;
+                    return 0;
+                  })
+                  .map((e) => (
+                    <Card key={e.title} {...e} />
+                  ))}
+              </div>
+              <div className="flex justify-end gap-2 col-span-3 items-center">
+                {skip > 0 && (
+                  <button
+                    className="bg-blue-500 text-white p-3 rounded-full cursor-pointer "
+                    onClick={() => setParams(-limit)}
+                  >
+                    <PiLessThan />
+                  </button>
+                )}
+                <button
+                  className="bg-blue-500 text-white p-3 rounded-full cursor-pointer "
+                  onClick={() => setParams(limit)}
+                >
+                  <PiGreaterThanBold />
+                </button>
+              </div>
+            </div>
+          )}
         </section>
       </main>
     </>
