@@ -46,7 +46,11 @@ const TopProducts = ({ heading }) => {
         style={{ msOverflowStyle: "none", scrollbarWidth: "none" }}
       >
         {products.map((e) => (
-          <Card key={e.name} {...e} />
+          <Card
+            key={e.name}
+            {...e}
+            thumbnail="https://dealaday-images.eu-central-1.linodeobjects.com/2683f10bde07984e524f91f1dcd1d7d5/U-2411.jpeg"
+          />
         ))}
       </div>
     </section>

@@ -1,13 +1,31 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FiMenu } from "react-icons/fi";
 import { IoClose } from "react-icons/io5";
 import { FiUser } from "react-icons/fi";
 import { IoMdHeartEmpty } from "react-icons/io";
 import { IoSearch } from "react-icons/io5";
 import { Link } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
+import debounce from "lodash";
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [search, setSearch] = useState(() => searchParams.get("q") || "");
+
+  // Sync state with URL when search changes
+  useEffect(() => {
+    setSearchParams((prev) => {
+      const newParams = new URLSearchParams(prev);
+      if (search) {
+        newParams.set("q", search);
+      } else {
+        newParams.delete("q");
+      }
+      return newParams;
+    });
+  }, [search, setSearchParams]);
+
   const toggleSidebar = () => {
     console.log("Clicked" + isOpen);
     setIsOpen(!isOpen);
@@ -123,7 +141,12 @@ const Header = () => {
       <section className="lg:bg-[#101828] py-4">
         <div className="max-w-xs sm:max-w-lg md:max-w-2xl lg:max-w-3xl xl:max-w-6xl 2xl:max-w-8xl lg:w-1/3  border-gray-500 border-1 flex items-center mx-auto rounded-lg font-light">
           <input
+            onChange={(e) => {
+              console.log(e.target.value);
+              setSearch(e.target.value);
+            }}
             type="text"
+            value={search}
             className="placeholder:text-gray-500 placeholder:text-sm  text-gray-500  w-full py-2 border-r px-5 focus:outline-0"
             placeholder="Search for products and brands"
           />

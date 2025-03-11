@@ -7,6 +7,7 @@ import axios from "axios";
 import Card from "../component/card";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useSearchParams } from "react-router-dom";
+
 const ProductPage = () => {
   const [filterOpen, setFilterOpen] = useState(false);
   const [filter, setFilter] = useState("Default");
@@ -18,19 +19,20 @@ const ProductPage = () => {
 
   const limit = parseInt(searchParams.get("limit") || 9);
   const skip = parseInt(searchParams.get("skip") || 0);
-
-  // console.log("limit", limit);
-  // console.log("skip", skip);
+  let search = searchParams.get("q");
 
   let fetchProducts = async () => {
-    let products = await axios.get(
-      `https://dummyjson.com/products?limit=${limit}&skip=${skip}`
-    );
+    let url = `https://dummyjson.com/products?limit=${limit}&skip=${skip}`;
+    if (search && search.trim() !== "") {
+      console.log("Searching for:", search);
+      url = `https://dummyjson.com/products/search?q=${search}`;
+    }
+    let products = await axios.get(url);
     return products.data;
   };
 
   const { isLoading, error, data } = useQuery({
-    queryKey: ["products", limit, skip],
+    queryKey: ["products", limit, skip, search],
     queryFn: fetchProducts,
     staleTime: Infinity,
     // Prevents UI jumps by keeping previous data while fetching new data
@@ -345,17 +347,20 @@ const ProductPage = () => {
           ) : (
             <div className="col-span-3 border-gray-400 rounded-lg grid grid-cols-1 sm:grid-cols-3 gap-5 transition-all duration-500 ease-in-out">
               <div className="col-span-3 border-gray-400 rounded-lg grid grid-cols-1 sm:grid-cols-3 gap-5 transition-all duration-500 ease-in-out">
-                {data?.products
-                  .slice()
-                  .sort((a, b) => {
-                    if (filter === "low-to-high") return a.price - b.price;
-                    if (filter === "high-to-low") return b.price - a.price;
-                    return 0;
-                  })
-                  .map((e) => (
-                    <Card key={e.title} {...e} />
-                  ))}
+                {data?.products?.length === 0 ? (
+                  <h3 className="font-medium">Product End</h3>
+                ) : (
+                  data?.products
+                    .slice()
+                    .sort((a, b) => {
+                      if (filter === "low-to-high") return a.price - b.price;
+                      if (filter === "high-to-low") return b.price - a.price;
+                      return 0;
+                    })
+                    .map((e) => <Card key={e.title} {...e} />)
+                )}
               </div>
+
               <div className="flex justify-end gap-2 col-span-3 items-center">
                 {skip > 0 && (
                   <button
@@ -365,12 +370,14 @@ const ProductPage = () => {
                     <PiLessThan />
                   </button>
                 )}
-                <button
-                  className="bg-blue-500 text-white p-3 rounded-full cursor-pointer "
-                  onClick={() => setParams(limit)}
-                >
-                  <PiGreaterThanBold />
-                </button>
+                {data?.products?.length != 0 && (
+                  <button
+                    className="bg-blue-500 text-white p-3 rounded-full cursor-pointer "
+                    onClick={() => setParams(limit)}
+                  >
+                    <PiGreaterThanBold />
+                  </button>
+                )}
               </div>
             </div>
           )}
