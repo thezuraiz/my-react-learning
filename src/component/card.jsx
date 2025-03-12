@@ -8,7 +8,7 @@ const Card = (props) => {
   const [click, setClick] = useState(false);
 
   return (
-    <Link to={`/products/${id}`}>
+    <Link to={`${id ? `/products/${id}` : "/"}`}>
       <div className="p-6 border border-gray-200 rounded-2xl relative">
         <ImageWithLoader src={thumbnail} />
         <div className="mt-5">

@@ -1,6 +1,9 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import useZutandStore from "../../store/zutandStore";
+import { useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 const Login = () => {
   const userSchema = z.object({
@@ -8,31 +11,40 @@ const Login = () => {
     password: z.string().min(4).max(20),
   });
 
-  // window.localStorage.clear("isLogin");
-
   const {
     register,
     handleSubmit,
     formState: { errors },
+    setValue,
+    getValues,
   } = useForm({
     resolver: zodResolver(userSchema),
   });
+  useEffect(() => {
+    setValue("email", "ghouri.dev@gmail.com");
+    setValue("password", "12345678Ab!");
+  }, []);
 
-  var submitForm = (data) => {
-    window.localStorage.setItem("isLogin", true);
-    window.localStorage.setItem("email", data.email);
+  let navigate = useNavigate();
+  let login = useZutandStore((state) => state.login);
 
-    console.log("You are Loggined");
+  var submitForm = () => {
+    let email = getValues("email");
+    let password = getValues("password");
+    console.log("Email: ", email, " Password: ", password);
+    login(email, password, navigate);
   };
 
   return (
     <section className="h-screen bg-gray-100 flex justify-center items-center">
       <div className="border border-gray-200 rounded-2xl w-2/7 text-center bg-white p-8 mx-auto">
-        <img
-          src="https://dealaday-images.eu-central-1.linodeobjects.com/5309fd5b3d244d1bf1dfe116e5c49063/test1679300288.svg"
-          alt="logo"
-          className=" w-50 mx-auto my-2"
-        />
+        <Link to="/">
+          <img
+            src="https://dealaday-images.eu-central-1.linodeobjects.com/5309fd5b3d244d1bf1dfe116e5c49063/test1679300288.svg"
+            alt="logo"
+            className=" w-50 mx-auto my-2"
+          />
+        </Link>
 
         <form
           onSubmit={handleSubmit((d) => submitForm(d))}

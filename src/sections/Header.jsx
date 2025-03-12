@@ -4,14 +4,16 @@ import { IoClose } from "react-icons/io5";
 import { FiUser } from "react-icons/fi";
 import { IoMdHeartEmpty } from "react-icons/io";
 import { IoSearch } from "react-icons/io5";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import useZutandStore from "../store/zutandStore";
 import { useSearchParams } from "react-router-dom";
-import debounce from "lodash";
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const [search, setSearch] = useState(() => searchParams.get("q") || "");
+  let logout = useZutandStore((state) => state.logout);
+  let navigate = useNavigate();
 
   // Sync state with URL when search changes
   useEffect(() => {
@@ -89,9 +91,16 @@ const Header = () => {
       </nav>
       <nav className="p-2 bg-green-500 text-white text-center text-md font-poppins">
         Get 10% off your first order.{" "}
-        <a href="/" className="text-black">
-          Signup here
-        </a>
+        <button
+          className="text-black"
+          onClick={() => {
+            console.log(navigate);
+            logout(navigate);
+            navigate("/login");
+          }}
+        >
+          Logout
+        </button>
       </nav>
 
       <header className="bg-[#101828]">

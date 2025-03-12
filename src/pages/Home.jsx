@@ -1,55 +1,56 @@
 import { useEffect } from "react";
 import HeroGift from "../sections/HeroGift";
 import TopProducts from "../sections/TopProducts";
-// import { UserContext } from "../context/UserContext";
-import useFetchApi from "../helper_function/api_handler";
-import { useDispatch, useSelector } from "react-redux";
+import useZutandStore from "../store/zutandStore";
+import { useNavigate } from "react-router-dom";
+import useAxiosHook from "../hooks/customHooks/UseAxiosHook";
+import { get } from "react-hook-form";
 
 const Home = () => {
-  // const { user, setUser } = useContext(UserContext);
-  /// Now using Redux
-  const user = useSelector((state) => state);
-  const dispatch = useDispatch();
-  const { fetch_Api } = useFetchApi();
-  console.log("user==>", user);
-  const fetchProfile = async () => {
+  const navigate = useNavigate();
+  const setProfile = useZutandStore((state) => state.setProfile);
+  const user = useZutandStore((state) => state.user);
+  const accessToken = useZutandStore((state) => state.accessToken);
+  let baseUrl = import.meta.env.VITE_API_URL;
+  const { fetchData } = useAxiosHook();
+
+  const fetchProfileData = async () => {
+    if (!accessToken) {
+      console.warn("⚠️ No access token found. Redirecting to login...");
+      navigate("/login");
+      return;
+    }
+    if (user) {
+      console.log("User already exists. Skipping profile fetch.");
+      return;
+    }
     try {
-      const response = await fetch_Api(
-        "https://apiadsells.nms-mdm.com/api/profile/",
-        "GET",
-        {
-          "Content-Type": "application/json",
-        }
-      );
       console.log("Fetching Profile");
-      console.log("Success:", response);
-      if (response.type == "client_error") {
-        throw new Error("Un Authenticated");
-      }
-      console.log("Profile: ", response);
-      // setUser({ ...response });
-      dispatch({
-        type: "LOGIN",
-        payload: { ...response },
-      });
-    } catch (e) {
-      alert("Error: " + e.message);
+      const response = await fetchData(get, `${baseUrl}/profile/`);
+      setProfile(response);
+    } catch (error) {
+      console.log("❌ Error fetching profile:", error);
+      alert("UnAuthorized, Please Login");
+      navigate("/login");
     }
   };
   useEffect(() => {
-    fetchProfile();
-
-    return () => {
-      console.log("Component Unmounted");
-    };
+    console.log("🏠 Home Component Mounted");
+    fetchProfileData();
+    return () => console.log("Home Component Unmount");
   }, []);
   return (
     <>
-      <h3>User: {user.first_name + " " + user.last_name}</h3>
-      <h3>Email: {user.email}</h3>
-      <h3>Role: {user.role}</h3>
-      <h3>Phone No: {user.phone_number}</h3>
-      <h3>Is Authenticated: {user.isAuthenticated ? "true" : "false"}</h3>
+      {user && (
+        <marquee className="py-2 font-medium flex justify-between gap-5">
+          <span className="mx-5">
+            User: {user.first_name + " " + user.last_name}
+          </span>
+          <span className="mx-5">Email: {user.email}</span>
+          <span className="mx-5">Role: {user.role}</span>
+          <span className="mx-5">Phone No: {user.phone_number}</span>
+        </marquee>
+      )}
       <HeroGift />
       <TopProducts heading="Top Products" />
       <TopProducts heading="Most Popular" />
