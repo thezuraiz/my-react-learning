@@ -4,7 +4,7 @@ import { IoClose } from "react-icons/io5";
 import { FiUser } from "react-icons/fi";
 import { IoMdHeartEmpty } from "react-icons/io";
 import { IoSearch } from "react-icons/io5";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import useZutandStore from "../store/zutandStore";
 import { useSearchParams } from "react-router-dom";
 
@@ -94,7 +94,6 @@ const Header = () => {
         <button
           className="text-black mx-1 font-medium cursor-pointer"
           onClick={() => {
-            console.log(navigate);
             logout(navigate);
             navigate("/login");
           }}
@@ -115,25 +114,40 @@ const Header = () => {
           </Link>
           <ul className="justify-between items-center hidden lg:flex">
             <li>
-              <Link to="/" className="px-5 font-medium hover:text-blue-500">
+              <NavLink
+                to="/"
+                className={({ isActive }) =>
+                  `px-5 font-medium hover:text-blue-500 ${
+                    isActive ? "text-green-500" : "text-white"
+                  }`
+                }
+              >
                 Home
-              </Link>
+              </NavLink>
             </li>
             <li>
-              <Link
+              <NavLink
                 to="/products"
-                className="px-5 font-medium hover:text-blue-500"
+                className={({ isActive }) =>
+                  `px-5 font-medium hover:text-blue-500 ${
+                    isActive ? "text-green-500" : "text-white"
+                  }`
+                }
               >
                 Products
-              </Link>
+              </NavLink>
             </li>
             <li>
-              <Link
+              <NavLink
                 to="/blogs"
-                className="px-5 font-medium hover:text-blue-500"
+                className={({ isActive }) =>
+                  `px-5 font-medium hover:text-blue-500 ${
+                    isActive ? "text-green-500" : "text-white"
+                  }`
+                }
               >
                 Blogs
-              </Link>
+              </NavLink>
             </li>
           </ul>
 
@@ -151,7 +165,6 @@ const Header = () => {
         <div className="max-w-xs sm:max-w-lg md:max-w-2xl lg:max-w-3xl xl:max-w-6xl 2xl:max-w-8xl lg:w-1/3  border-gray-500 border-1 flex items-center mx-auto rounded-lg font-light">
           <input
             onChange={(e) => {
-              console.log(e.target.value);
               setSearch(e.target.value);
             }}
             type="text"
