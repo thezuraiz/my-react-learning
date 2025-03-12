@@ -373,7 +373,10 @@ const ProductPage = () => {
                 {data?.products?.length != 0 && (
                   <button
                     className="bg-blue-500 text-white p-3 rounded-full cursor-pointer "
-                    onClick={() => setParams(limit)}
+                    onClick={() => {
+                      window.scrollTo({ top: 30, behavior: "smooth" });
+                      setParams(limit);
+                    }}
                   >
                     <PiGreaterThanBold />
                   </button>

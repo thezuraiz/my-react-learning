@@ -92,7 +92,7 @@ const Header = () => {
       <nav className="p-2 bg-green-500 text-white text-center text-md font-poppins">
         Get 10% off your first order.{" "}
         <button
-          className="text-black"
+          className="text-black mx-1 font-medium cursor-pointer"
           onClick={() => {
             console.log(navigate);
             logout(navigate);

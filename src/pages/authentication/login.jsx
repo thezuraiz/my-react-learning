@@ -4,6 +4,7 @@ import { z } from "zod";
 import useZutandStore from "../../store/zutandStore";
 import { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const Login = () => {
   const userSchema = z.object({
@@ -20,7 +21,13 @@ const Login = () => {
   } = useForm({
     resolver: zodResolver(userSchema),
   });
+  let { user } = useZutandStore();
   useEffect(() => {
+    // console.log("user: ", user);
+    if (user) {
+      toast.error("You alraedy logined, Please log out first");
+      navigate("/");
+    }
     setValue("email", "ghouri.dev@gmail.com");
     setValue("password", "12345678Ab!");
   }, []);

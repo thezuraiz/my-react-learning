@@ -10,6 +10,7 @@ import Home from "./pages/Home";
 import Product from "./sections/Product";
 import Login from "./pages/authentication/login";
 import ProtectedRoute from "./component/ProtectedRoute";
+import PageNotFound from "./pages/404";
 
 const App = () => {
   const location = useLocation();
@@ -28,6 +29,7 @@ const App = () => {
 
         <Route path="products" element={<ProductPage />} />
         <Route path="login" element={<Login />} />
+        <Route path="*" element={<PageNotFound />} />
       </Routes>
 
       {!hideHeaderFooter && <Footer />}

@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import axios from "axios";
 import { persist } from "zustand/middleware";
+import { toast } from "react-toastify";
 
 const useZutandStore = create(
   persist(
@@ -21,10 +22,10 @@ const useZutandStore = create(
               get().accessToken,
               response.data.access
             );
-            alert("Login Successful");
+            toast.success("Login Successful");
             navigate("/");
           } catch (error) {
-            alert("Loggined Failed: ", error);
+            toast.error("Loggined Failed: ", error);
             console.error("Error:", error);
           }
         },
