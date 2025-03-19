@@ -26,8 +26,8 @@ const Login = () => {
   } = useForm({
     resolver: zodResolver(userSchema),
     defaultValues: {
-      email: "ghouri.dev@gmail.com",
-      password: "12345678Ab!",
+      // email: "ghouri.dev@gmail.com",
+      // password: "12345678Ab!",
     },
   });
 
@@ -37,11 +37,10 @@ const Login = () => {
       if (user) {
         toast.error("You are already logged in. Please log out first.");
         navigate("/");
-        throw new Error("Already logged in");
+        throw new Error("Already Logged in");
       }
-      return login(email, password, navigate);
+      return login(email, password);
     },
-    onError: () => toast.error("Login Failed"),
   });
 
   const onSubmit = async (data) => {

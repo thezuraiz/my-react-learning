@@ -8,7 +8,7 @@ import { createRoot } from "react-dom/client";
 // import UseStateHook from "./hooks/useStateHook";
 // import UseLayoutEffect from "./hooks/useLayoutEffect";
 // import CustomHook from "./component/CustomHook";
-import App from "./App.jsx";
+// import App from "./App.jsx";
 // import CounterAppUsingRedux from "./component/CounterAppUsingRedux.jsx";
 import { Provider } from "react-redux";
 
@@ -25,6 +25,7 @@ import userStore from "./store/userRedux.jsx";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { Slide, ToastContainer } from "react-toastify";
+import TodoApp from "./apps/todo_app.jsx";
 
 const queryClient = new QueryClient();
 
@@ -49,7 +50,8 @@ createRoot(document.getElementById("root")).render(
     {/* <UseEffectComponent /> */}
     <Provider store={userStore}>
       <QueryClientProvider client={queryClient}>
-        <App />
+        {/* <App /> */}
+        <TodoApp />
         <ToastContainer
           position="bottom-left"
           autoClose={2000}

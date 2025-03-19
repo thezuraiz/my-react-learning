@@ -22,7 +22,6 @@ const useZutandStore = create(
               get().accessToken,
               response.data.access
             );
-            toast.success("Login Successful");
             navigate("/");
           } catch (error) {
             toast.error("Loggined Failed: ", error);

@@ -3,9 +3,10 @@ import TopProducts from "../sections/TopProducts";
 import useZutandStore from "../store/zutandStore";
 import { useNavigate } from "react-router-dom";
 import useAxiosHook from "../hooks/customHooks/UseAxiosHook";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import ApiLoader from "../component/Loader";
 import { toast } from "react-toastify";
+import { useEffect } from "react";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -14,6 +15,7 @@ const Home = () => {
   const accessToken = useZutandStore((state) => state.accessToken);
   let baseUrl = import.meta.env.VITE_API_URL;
   const { fetchData } = useAxiosHook();
+  const queryClient = useQueryClient();
 
   const {
     data: profile,
@@ -36,6 +38,12 @@ const Home = () => {
     retry: false,
     enabled: !!accessToken,
   });
+
+  useEffect(() => {
+    if (!accessToken) {
+      queryClient.removeQueries(["profile"]);
+    }
+  }, [accessToken, queryClient]);
 
   if (profile && !user) {
     setProfile(profile);
